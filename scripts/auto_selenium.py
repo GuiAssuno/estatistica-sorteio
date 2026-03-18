@@ -3,21 +3,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-# 1. Configura e inicializa o navegador (neste caso, o Chrome)
-# O ChromeDriverManager baixa e gerencia a versão correta do driver para você.
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-# 2. Navega até a URL desejada
 url = 'https://quotes.toscrape.com/js/' # Este site carrega as citações com JavaScript
 driver.get(url)
 
-# 3. Opcional: Maximiza a janela do navegador
 driver.maximize_window()
-
-# Imprime o título da página para confirmar que funcionou
 print(f"O título da página é: {driver.title}")
-
-# 4. É ESSENCIAL fechar o navegador no final para não deixar processos abertos
 driver.quit()
 
 '''
