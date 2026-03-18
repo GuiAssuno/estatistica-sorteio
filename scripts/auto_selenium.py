@@ -32,7 +32,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# --- 1. Inicialização do Navegador ---
+#Inicialização do Navegador
 print("Iniciando o navegador...")
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 url = 'http://quotes.toscrape.com/js/'
@@ -41,23 +41,18 @@ driver.get(url)
 dados = []
 
 try:
-    # --- 2. Espera Explícita ---
-    # Espera por no máximo 10 segundos até que o primeiro elemento com a classe 'quote' esteja visível.
-    # Esta é a forma correta de garantir que a página carregou antes de continuar.
     print("Aguardando o conteúdo dinâmico carregar...")
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, 'quote'))
     )
     print("Conteúdo carregado!")
 
-    # --- 3. Coleta dos Dados ---
-    # Encontra todos os 'divs' que contêm as citações
+    #  Coleta dos Dados
     quotes_divs = driver.find_elements(By.CLASS_NAME, 'quote')
     
     print(f"Encontradas {len(quotes_divs)} citações na página.")
 
     for quote_div in quotes_divs:
-        # Dentro de cada div, encontramos o texto da citação e o autor
         texto = quote_div.find_element(By.CLASS_NAME, 'text').text
         autor = quote_div.find_element(By.CLASS_NAME, 'author').text
         
@@ -67,22 +62,18 @@ except Exception as e:
     print(f"Ocorreu um erro durante o scraping: {e}")
 
 finally:
-    # --- 4. Fechamento do Navegador ---
-    # O bloco 'finally' garante que o navegador será fechado mesmo se ocorrer um erro.
+    # Fechamento do Navegado
     print("Fechando o navegador.")
     driver.quit()
 
 
-# --- 5. Salvando os Dados ---
+# Salvando os Dados 
 if dados:
     df = pd.DataFrame(dados)
     df.to_csv('citacoes_dinamicas.csv', index=False, encoding='utf-8')
     print("\n--- Primeiras 5 citações salvas: ---")
     print(df.head())
     print("\nDados salvos com sucesso em 'citacoes_dinamicas.csv'!")
-
-
-#'''
 
 
 
@@ -94,19 +85,15 @@ from webdriver_manager.firefox import GeckoDriverManager
 # Importações essenciais para o modo headless do Firefox
 from selenium.webdriver.firefox.options import Options
 
-# --- 1. Configuração das Opções Headless ---
 ff_options = Options()
 ff_options.add_argument("--headless") # A linha mais importante!
 
-# --- 2. Inicialização do Driver ---
 driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=ff_options)
 print("Driver do Firefox iniciado em modo headless.")
 
-# --- 3. O resto do seu código ---
 url = 'http://quotes.toscrape.com/js/'
 driver.get(url)
 print(f"Título da página: {driver.title}")
 
-# --- 4. Fechamento ---
 driver.quit()
 """
